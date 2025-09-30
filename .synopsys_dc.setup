@@ -1,0 +1,36 @@
+# -----------------------------------------------------------------------------
+# File: .synopsys_dc.setup
+# Description: Synopsys setup file for SOC SISO project, POW version
+# Author: Sabih Gerez, University of Twente
+# Creation date: Sat Aug  7 16:46:41 CEST 2004
+# -----------------------------------------------------------------------------
+# $Rev: 1$
+# $Author: gerezsh$
+# $Date: Thu Sep 29 11:57:46 CEST 2022$
+# $Log$
+# ----------------------------------------------------------------------------
+
+# settings for UMC 180 nm library
+set link_library  { * umcl18u250t2_typ.db }
+
+set search_path [list . \
+    /remote/labware/technology/UMC/UMCL18U250D2_2.4/design_compiler\
+    ${synopsys_root}/libraries/syn \
+    ${synopsys_root}/dw/sim_ver]
+
+set target_library  umcl18u250t2_typ.db
+
+set symbol_library  umcl18u250t2.sdb 
+
+
+# does this activate DesignWare?
+set synthetic_library [list dw_foundation.sldb]
+lappend link_library $synthetic_library
+# lappend search_path [format "%s%s" $synopsys_root "/dw/sim_ver"]
+
+# set vhdlout_write_top_configuration   "TRUE"
+# set vhdlout_use_packages { IEEE.std_logic_1164
+#                            tcbn90ghp.VCOMPONENTS }
+
+set vhdlout_use_packages { IEEE.std_logic_1164
+                           umcl18u250t2.umcl18u250t2_VCOMPONENTS }

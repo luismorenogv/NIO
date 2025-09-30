@@ -1,0 +1,58 @@
+#!/bin/sh
+# the line below is a qsub pseudo-comment; do not touch!
+#$ -S /bin/sh -cwd
+# -----------------------------------------------------------------------------
+# File         : generate-design
+# Description  : batch script for synthesis, version for project NIO
+# Author       : Sabih Gerez, University of Twente
+# Creation date: September 6, 2015
+# -----------------------------------------------------------------------------
+# $Rev: 1$
+# $Author: gerezsh$
+# $Date: Thu Sep 29 11:57:46 CEST 2022$
+# $Log$
+# -----------------------------------------------------------------------------
+
+
+# List all source files necessary for the synthesis here.
+# Use a backslash ('\') as the last character to end a line and continue 
+# on the next.
+
+SOURCE_FILE_LIST="gp_custom_ent.vhd gp_custom_simple_arch.vhd"
+
+# Declare here the top-level entity. This name should correspond to the
+# real entity.
+
+TOP_ENTITY="gp_custom"
+
+# Declare the top-level architecture. This does not need to correspond
+# to a read VHDL architecture name and is only used to give the
+# synthesized result a unique name.
+
+TOP_ARCH="simple"
+
+# Declare here the name of the clock signal
+
+CLOCK="clk"
+# CLOCK="clock"
+
+# List here the word lengths for which the design should be
+# synthesized.
+
+# set WORD_LENGTHS to "none" if the design does not have generic
+# "word_length"
+WORD_LENGTHS="none"
+
+# List here the clock periods for which the design should be
+# synthesized. Note: clock periods that make sense normally depend on
+# the word length.
+
+CLOCK_PERIODS="5"
+# CLOCK_PERIODS="5 4 3 2"
+
+# give INSERT_SCAN a value of "y" if you want a scan chain
+INSERT_SCAN=n
+
+# *** DO NOT EDIT BELOW THIS LINE ********************************************
+
+. $SOC_ROOT/scripts/generate-design-core04
