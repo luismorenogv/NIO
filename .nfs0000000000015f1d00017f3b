@@ -1,0 +1,93 @@
+# do simulate.tcl
+# Compile of altera_avalon_clock_source.vhd was successful.
+# Compile of altera_avalon_reset_source.vhd was successful.
+# Compile of conf_tb_nios_siso_copy.vhd failed with 1 errors.
+# Compile of conf_tb_nios_siso_sec_soft.vhd failed with 1 errors.
+# Compile of gp_custom_ent.vhd was successful.
+# Compile of gp_custom_mac_arch.vhd was successful with warnings.
+# Compile of gp_custom_simple_arch.vhd was successful.
+# Compile of nios_siso.vhd was successful.
+# Compile of tb_nios_siso.vhd was successful.
+# Compile of tvc_nios_siso.vhd was successful.
+# Compile of conf_tb_nios_siso_sec_opt.vhd was successful.
+# 11 compiles, 2 failed with 2 errors.
+# Compile of altera_avalon_clock_source.vhd was successful.
+# Compile of altera_avalon_reset_source.vhd was successful.
+# Compile of conf_tb_nios_siso_copy.vhd was successful.
+# Compile of conf_tb_nios_siso_sec_soft.vhd was successful.
+# Compile of gp_custom_ent.vhd was successful.
+# Compile of gp_custom_mac_arch.vhd was successful with warnings.
+# Compile of gp_custom_simple_arch.vhd was successful.
+# Compile of nios_siso.vhd was successful.
+# Compile of tb_nios_siso.vhd was successful.
+# Compile of tvc_nios_siso.vhd was successful.
+# Compile of conf_tb_nios_siso_sec_opt.vhd was successful.
+# 11 compiles, 0 failed with no errors.
+start-sim conf_tb_nios_siso_sec_opt
+# invalid command name "start-sim"
+start_sim conf_tb_nios_siso_sec_opt
+# vsim -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cyclonev_ver -L cyclonev_hssi_ver -L cyclonev_pcie_hip_ver -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cyclonev -L error_adapter_0 -L avalon_st_adapter -L rsp_mux_001 -L rsp_mux -L rsp_demux -L cmd_mux_002 -L cmd_mux -L cmd_demux_001 -L cmd_demux -L router_004 -L router_002 -L router_001 -L router -L jtag_uart_0_avalon_jtag_slave_agent_rsp_fifo -L jtag_uart_0_avalon_jtag_slave_agent -L nios2_gen2_data_master_agent -L jtag_uart_0_avalon_jtag_slave_translator -L nios2_gen2_data_master_translator -L cpu -L rst_controller -L irq_mapper -L mm_interconnect_0 -L on_chip_ra -L nios2_gen2 -L jtag_uart_0 work.conf_tb_nios_siso_sec_opt 
+# Start time: 15:09:37 on Oct 03,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.std_logic_arith(body)
+# Loading ieee.std_logic_unsigned(body)
+# Loading altera.altera_europa_support_lib(body)
+# Loading altera_mf.altera_mf_components
+# Loading ieee.std_logic_textio(body)
+# Loading verilog.vl_types(body)
+# Loading work.conf_tb_nios_siso_sec_opt#1
+# Loading work.tb_nios_siso(structural)#1
+# Loading work.altera_avalon_clock_source(behavioral)#1
+# Loading work.altera_avalon_reset_source(behavioral)#1
+# Loading work.nios_siso(rtl)#1
+# Loading work.gp_custom(mac)#1
+# Loading jtag_uart_0.nios_siso_jtag_uart_0(europa)#1
+# Loading nios2_gen2.nios_siso_nios2_gen2(rtl)#1
+# Loading cpu.nios_siso_nios2_gen2_cpu(europa)#1
+# Loading cpu.nios_siso_nios2_gen2_cpu_test_bench(europa)#1
+# Loading altera_mf.altera_common_conversion(body)
+# Loading altera_mf.altera_device_families(body)
+# Loading altera_mf.altsyncram(translated)#1
+# Loading altera_mf.altsyncram(translated)#2
+# Loading cpu.nios_siso_nios2_gen2_cpu_nios2_oci(europa)#1
+# Loading cpu.nios_siso_nios2_gen2_cpu_nios2_oci_break(europa)#1
+# Loading cpu.nios_siso_nios2_gen2_cpu_nios2_oci_itrace(europa)#1
+# Loading cpu.nios_siso_nios2_gen2_cpu_nios2_oci_fifo(europa)#1
+# Loading altera_mf.altsyncram(translated)#3
+# Loading cpu.nios_siso_nios2_gen2_cpu_debug_slave_wrapper(europa)#1
+# Loading on_chip_ra.nios_siso_on_chip_ra(europa)#1
+# Loading altera_mf.altsyncram(translated)#4
+# Loading mm_interconnect_0.nios_siso_mm_interconnect_0(rtl)#1
+# Loading mm_interconnect_0.nios_siso_mm_interconnect_0_nios2_gen2_data_master_translator(rtl)#1
+# Loading sv_std.std
+# Loading mm_interconnect_0.nios_siso_mm_interconnect_0_jtag_uart_0_avalon_jtag_slave_translator(rtl)#1
+# Loading mm_interconnect_0.nios_siso_mm_interconnect_0_gp_custom_0_avalon_slave_translator(rtl)#1
+# Loading mm_interconnect_0.nios_siso_mm_interconnect_0_nios2_gen2_debug_mem_slave_translator(rtl)#1
+# Loading mm_interconnect_0.nios_siso_mm_interconnect_0_on_chip_ra_s1_translator(rtl)#1
+# Loading jtag_uart_0_avalon_jtag_slave_agent_rsp_fifo.nios_siso_mm_interconnect_0_jtag_uart_0_avalon_jtag_slave_agent_rsp_fifo(rtl)#1
+# Loading cmd_demux.nios_siso_mm_interconnect_0_cmd_demux(rtl)#1
+# Loading cmd_demux_001.nios_siso_mm_interconnect_0_cmd_demux_001(rtl)#1
+# Loading sgate.sgate_pack(body)
+# Loading ieee.std_logic_signed(body)
+# Loading cmd_mux_002.nios_siso_mm_interconnect_0_cmd_mux_002(rtl)#1
+# Loading rsp_demux.nios_siso_mm_interconnect_0_rsp_demux(rtl)#1
+# Loading rsp_mux.nios_siso_mm_interconnect_0_rsp_mux(rtl)#1
+# Loading rsp_mux_001.nios_siso_mm_interconnect_0_rsp_mux_001(rtl)#1
+# Loading irq_mapper.nios_siso_irq_mapper(rtl)#1
+# Loading work.tvc_nios_siso(file_io)#1
+# do simulate.tcl
+add wave -position insertpoint  \
+sim:/tb_nios_siso/siso_data_in \
+sim:/tb_nios_siso/siso_data_out \
+sim:/tb_nios_siso/clk \
+sim:/tb_nios_siso/reset \
+sim:/tb_nios_siso/siso_req \
+sim:/tb_nios_siso/siso_ready
+run -all
+# --> Start of sec_hw (HW-accelerated biquad) <--
+# Break key hit
+# Break in Architecture europa at /home/socadmin/CPU/nios-system-2022/nios_siso/simulation/mentor/./../submodules/nios_siso_nios2_gen2_cpu.vhd line 4656

@@ -1,0 +1,16 @@
+# simulation / synthesis outputs
+work/
+vsim.wlf
+transcript
+*.elf
+*.hex
+*.map
+*.s
+*.o
+*.out
+*.qdb
+*.qpg
+*.qtl
+*.tr
+*.log
+
