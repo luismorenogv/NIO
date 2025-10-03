@@ -107,8 +107,8 @@ begin
               avs_readdata <= (31 downto 1 => '0', 0 => in_busy);
             when 11 => -- output to external ready?
               avs_readdata <= (31 downto 1 => '0', 0 => out_busy);
-            when 22 =>  -- Y_OUT
-              avs_readdata <= (31 downto 16 => y_out_reg(15), 15 downto 0 => std_logic_vector(y_out_reg)); -- sign-extend
+            when 22 =>
+              avs_readdata <= (31 downto 16 => y_out_reg(15)) & std_logic_vector(y_out_reg);        
             when 24 =>  -- STATUS
               avs_readdata <= (31 downto 2 => '0', 1 => status_busy, 0 => status_done);
             when others => 
@@ -223,10 +223,13 @@ begin
     if ctrl_clr = '1' and status_busy = '0' then
       z1 <= (others=>'0'); z2 <= (others=>'0');
     end if;
+    -- 16x16 -> 32 (numeric_std returns 16+16 = 32 bits here)
+    mul_p <= mul_a * mul_b;
 
-    -- multiply pipeline stage (combinational multiply, register product)
-    mul_p   <= resize(mul_a,32) * resize(mul_b,32);
-    mul_q28 <= shift_right(mul_p, 8);  -- arithmetic shift right by 8 (Q2.8)
+    -- Q2.8 scaling; avoid VHDL-2008 shift_right on SIGNED for old tools
+    -- arithmetic shift by 8 with sign-extension:
+    mul_q28 <= resize(mul_p(31 downto 8), mul_q28'length);
+
 
     case mac_s is
       when IDLE =>
