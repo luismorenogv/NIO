@@ -11,7 +11,7 @@ configuration conf_tb_nios_siso_sec_flex of tb_nios_siso is
   for structural
     for nios_system: nios_siso use entity work.nios_siso(rtl);
       for rtl
-        for gp_custom_0: gp_custom use entity work.gp_custom(flex);
+        for gp_custom_0: gp_custom use entity work.gp_custom(mac);
         end for;
         for on_chip_ra: nios_siso_on_chip_ra 
           use entity on_chip_ra.nios_siso_on_chip_ra(europa)
