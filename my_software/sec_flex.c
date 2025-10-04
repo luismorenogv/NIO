@@ -84,29 +84,30 @@ int main(void)
       int out_pair[2];
 
       for (int j = 0; j < 2; j++) {
+        int16_t x16 = (int16_t)in_pair[j]; // current sample
+
         /* y = z2 + b0*x  ->  ACC := z2; ACC += b0*x; y := ACC */
         hw_acc_set(z2);
-        hw_mac_q28(b0, (int16_t)x);
+        hw_mac_q28(b0, x16);
         int y = hw_acc_read();
         int16_t y16 = (int16_t)y;
 
-        /* z1_next = b2*x + a2*y  ->  ACC := 0; ACC += b2*x; ACC += a2*y; read ACC */
+        /* z1_next = b2*x + a2*y  ->  ACC := 0; ACC += b2*x; ACC += a2*y */
         hw_acc_clear();
-        hw_mac_q28(b2, (int16_t)x);
+        hw_mac_q28(b2, x16);
         hw_mac_q28(a2, y16);
         int z1_next = hw_acc_read();
 
-        /* z2_next = z1 + b1*x + a1*y  ->  ACC := z1; ACC += b1*x; ACC += a1*y; read ACC */
+        /* z2_next = z1 + b1*x + a1*y  ->  ACC := z1; ACC += b1*x; ACC += a1*y */
         hw_acc_set(z1);
-        hw_mac_q28(b1, (int16_t)x);
+        hw_mac_q28(b1, x16);
         hw_mac_q28(a1, y16);
         int z2_next = hw_acc_read();
 
-        /* commit state + output */
+        /* Commit state + output */
         z1 = z1_next;
         z2 = z2_next;
         out_pair[j] = y;
-
       }
 
       // Repack two 16-bit outputs to one 32-bit word 
