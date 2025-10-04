@@ -122,7 +122,7 @@ begin
             when 11 => -- output to external ready?
               avs_readdata <= (31 downto 1 => '0', 0 => out_busy);
             when 22 =>
-              avs_readdata <= (31 downto 16 => y_out_reg(15)) & std_logic_vector(y_out_reg);        
+              avs_readdata <= std_logic_vector(resize(y_out_reg, 32));
            when 24 =>
               avs_readdata <= (31 downto 3 => '0',
                               2 => status_done_sticky,   -- DONE sticky (new)
@@ -240,9 +240,10 @@ mac: process(clk, resetn)
       end if;
 
       -- 16x16 -> 32
-      mul_p <= mul_a * mul_b;
-      -- arithmetic >>8 (Q2.8); sign-extend top 8 bits
-      mul_q28 <= signed( (mul_p(31 downto 24) & mul_p(31 downto 8)) );
+      mul_p   <= mul_a * mul_b;
+      -- arithmetic shift-right by 8 (Q2.8), with sign extension
+      mul_q28 <= resize(mul_p(31 downto 8), 32);
+
 
       case mac_s is
         when IDLE =>
@@ -298,6 +299,7 @@ mac: process(clk, resetn)
           z2 <= t_z2;
           y_out_reg <= signed(y_acc(15 downto 0));  -- 16-bit like software
           status_done <= '1';
+          status_done_sticky <= '1';
           status_busy <= '0';
           mac_s <= IDLE;
       end case;
