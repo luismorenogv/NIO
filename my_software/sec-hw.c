@@ -37,7 +37,7 @@ static inline void clear_states(void) {
 static inline int16_t iir_step_hw(int16_t x) {
   IO_CUSTOM[REG_X_IN] = (uint16_t)x;
   IO_CUSTOM[REG_CTRL] = 1u;                      // START
-  while ((IO_CUSTOM[REG_STATUS] & 0x1u) == 0);   // Wait for DONE (bit0)
+  while (IO_CUSTOM[REG_STATUS] & 0x2u);   // Wait for DONE (bit0)
   return (int16_t)IO_CUSTOM[REG_Y_OUT];
 }
 
@@ -61,13 +61,9 @@ int main(void)
       int w = IO_CUSTOM[i];
 
       /* Extract two 16-bit samples with sign extension */
-      int16_t xin0, xin1;
-      if (w & 0x00008000) {
-        xin0 = w | 0xFFFF0000;
-      } else {
-        xin0 = w & 0x0000FFFF;
-      }
-      xin1 = (int16_t)(w >> 16);
+      int16_t xin0 = (w & 0x00008000) ? (int16_t)(w | 0xFFFF0000)
+                                : (int16_t)(w & 0x0000FFFF);
+      int16_t xin1 = (int16_t)(w >> 16);
 
       /* Process both samples through hardware accelerator */
       int16_t y0 = iir_step_hw(xin0);

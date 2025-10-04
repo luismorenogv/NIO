@@ -229,7 +229,6 @@ mac: process(clk, resetn)
       status_busy <= '0'; status_done <= '0';
       mac_s <= IDLE;
       mul_a <= (others=>'0'); mul_b <= (others=>'0');
-      mul_p <= (others=>'0'); mul_q28 <= (others=>'0');
       y_acc <= (others=>'0'); t_z1 <= (others=>'0'); t_z2 <= (others=>'0');
       y_out_reg <= (others=>'0');
     elsif rising_edge(clk) then
