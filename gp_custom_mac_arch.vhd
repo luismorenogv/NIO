@@ -34,11 +34,11 @@ architecture mac of gp_custom is
   -- Simple 2-phase-per-multiply FSM to account for mul latency
   type mac_state_t is (
     IDLE,
-    S1_SET, S1_USE,   -- m1 = b0*x ; y   = z2 + m1
-    S2_SET, S2_USE,   -- m2 = b1*x ; tz2 = z1 + m2
-    S3_SET, S3_USE,   -- m3 = a1*y ; tz2 = tz2 + m3
-    S4_SET, S4_USE,   -- m4 = b2*x ; tz1 = m4
-    S5_SET, S5_USE,   -- m5 = a2*y ; tz1 = tz1 + m5
+    M1,   -- m1 = b0*x ; y   = z2 + m1
+    M2,   -- m2 = b1*x ; tz2 = z1 + m2
+    M3,   -- m3 = a1*y ; tz2 = tz2 + m3
+    M4,   -- m4 = b2*x ; tz1 = m4
+    M5,   -- m5 = a2*y ; tz1 = tz1 + m5
     FIN
   );
   signal mac_s : mac_state_t := IDLE;
@@ -204,35 +204,25 @@ begin
           if ctrl_start = '1' then
             status_busy <= '1';
             mul_a <= b0;  mul_b <= x_in; -- m1 = b0*x
-            mac_s <= S1_SET;
+            mac_s <= M1;
           end if;
-
-        when S1_SET => mac_s <= S1_USE;
-        when S1_USE =>
+        when M1 =>
           y_acc <= z2 + mul_q28; -- y = z2 + m1
           mul_a <= b1;  mul_b <= x_in; -- m2 = b1*x
-          mac_s <= S2_SET;
-
-        when S2_SET => mac_s <= S2_USE;
-        when S2_USE =>
+          mac_s <= M2;
+        when M2 =>
           t_z2 <= z1 + mul_q28; -- tz2 = z1 + m2
           mul_a <= a1;  mul_b <= signed(y_acc(15 downto 0)); -- m3 = a1*y
-          mac_s <= S3_SET;
-
-        when S3_SET => mac_s <= S3_USE;
-        when S3_USE =>
+          mac_s <= M3;
+        when M3 =>
           t_z2 <= t_z2 + mul_q28; -- tz2 += m3
           mul_a <= b2;  mul_b <= x_in; -- m4 = b2*x
-          mac_s <= S4_SET;
-
-        when S4_SET => mac_s <= S4_USE;
-        when S4_USE =>
+          mac_s <= M4;
+        when M4 =>
           t_z1 <= mul_q28; -- tz1 = m4
           mul_a <= a2;  mul_b <= signed(y_acc(15 downto 0)); -- m5 = a2*y
-          mac_s <= S5_SET;
-
-        when S5_SET => mac_s <= S5_USE;
-        when S5_USE =>
+          mac_s <= M5;
+        when M5 =>
           t_z1 <= t_z1 + mul_q28; -- tz1 += m5
           mac_s <= FIN;
 
