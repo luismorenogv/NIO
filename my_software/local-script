@@ -1,0 +1,2 @@
+cd /home/s3608255/nio/my_software
+make -f Altera.mk hex MY_APP=sec_flex
