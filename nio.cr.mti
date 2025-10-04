@@ -1,0 +1,114 @@
+/home/s3608255/nio/conf_tb_nios_siso_sec_soft.vhd {1 {vcom -work work -2008 -vopt -stats=none /home/s3608255/nio/conf_tb_nios_siso_sec_soft.vhd
+QuestaSim-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Compiling configuration conf_tb_nios_siso_sec_soft
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading entity tb_nios_siso
+-- Loading architecture structural of tb_nios_siso
+-- Loading entity altera_avalon_clock_source
+-- Loading entity altera_avalon_reset_source
+-- Loading package NUMERIC_STD
+-- Loading entity nios_siso
+-- Loading package std_logic_textio
+-- Loading entity tvc_nios_siso
+-- Loading architecture rtl of nios_siso
+-- Loading entity gp_custom
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package altera_europa_support_lib
+-- Loading package altera_mf_components
+-- Loading entity nios_siso_on_chip_ra
+
+} {} {}} /home/s3608255/nio/gp_custom_mac_arch.vhd {1 {vcom -work work -2008 -vopt -stats=none /home/s3608255/nio/gp_custom_mac_arch.vhd
+QuestaSim-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Compiling architecture flex of gp_custom
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading entity gp_custom
+
+} {} {}} /home/s3608255/nio/tvc_nios_siso.vhd {1 {vcom -work work -2008 -vopt -stats=none /home/s3608255/nio/tvc_nios_siso.vhd
+QuestaSim-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package std_logic_textio
+-- Compiling entity tvc_nios_siso
+-- Compiling architecture file_io of tvc_nios_siso
+
+} {} {}} /home/s3608255/nio/nios_siso.vhd {1 {vcom -work work -2008 -vopt -stats=none /home/s3608255/nio/nios_siso.vhd
+QuestaSim-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity nios_siso
+-- Compiling architecture rtl of nios_siso
+
+} {} {}} /home/s3608255/nio/gp_custom_simple_arch.vhd {1 {vcom -work work -2008 -vopt -stats=none /home/s3608255/nio/gp_custom_simple_arch.vhd
+QuestaSim-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Compiling architecture simple of gp_custom
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading entity gp_custom
+
+} {} {}} /home/s3608255/nio/tb_nios_siso.vhd {1 {vcom -work work -2008 -vopt -stats=none /home/s3608255/nio/tb_nios_siso.vhd
+QuestaSim-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity tb_nios_siso
+-- Compiling architecture structural of tb_nios_siso
+
+} {} {}} /home/s3608255/nio/gp_custom_ent.vhd {1 {vcom -work work -2008 -vopt -stats=none /home/s3608255/nio/gp_custom_ent.vhd
+QuestaSim-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity gp_custom
+
+} {} {}} /home/s3608255/nio/altera_avalon_reset_source.vhd {1 {vcom -work work -2008 -vopt -stats=none /home/s3608255/nio/altera_avalon_reset_source.vhd
+QuestaSim-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity altera_avalon_reset_source
+-- Compiling architecture behavioral of altera_avalon_reset_source
+
+} {} {}} /home/s3608255/nio/conf_tb_nios_siso_sec_hw.vhd {1 {vcom -work work -2008 -vopt -stats=none /home/s3608255/nio/conf_tb_nios_siso_sec_hw.vhd
+QuestaSim-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Compiling configuration conf_tb_nios_siso_sec_hw
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading entity tb_nios_siso
+-- Loading architecture structural of tb_nios_siso
+-- Loading entity altera_avalon_clock_source
+-- Loading entity altera_avalon_reset_source
+-- Loading package NUMERIC_STD
+-- Loading entity nios_siso
+-- Loading package std_logic_textio
+-- Loading entity tvc_nios_siso
+-- Loading architecture rtl of nios_siso
+-- Loading entity gp_custom
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package altera_europa_support_lib
+-- Loading package altera_mf_components
+-- Loading entity nios_siso_on_chip_ra
+
+} {} {}} /home/s3608255/nio/altera_avalon_clock_source.vhd {1 {vcom -work work -2008 -vopt -stats=none /home/s3608255/nio/altera_avalon_clock_source.vhd
+QuestaSim-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity altera_avalon_clock_source
+-- Compiling architecture behavioral of altera_avalon_clock_source
+
+} {} {}}
