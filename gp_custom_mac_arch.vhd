@@ -45,6 +45,9 @@ architecture mac of gp_custom is
   signal y_acc                : signed(31 downto 0) := (others=>'0');
   signal t_z2, t_z1           : signed(31 downto 0) := (others=>'0');
 
+  -- status "done" sticky bit
+  signal status_done_sticky : std_logic := '0';
+
 begin
   -- INPUT MAPPING --
   -- add <= avs_addr(5 downto 2);
@@ -81,9 +84,12 @@ begin
           when 19 => a1 <= signed(avs_writedata(15 downto 0));
           when 20 => a2 <= signed(avs_writedata(15 downto 0));
           when 21 => x_in <= signed(avs_writedata(15 downto 0));
-          when 23 =>  -- CTRL: bit0 START, bit1 CLR
+          when 23 =>  -- CTRL
             ctrl_start <= avs_writedata(0);
             ctrl_clr   <= avs_writedata(1);
+            if avs_writedata(2)='1' then
+              status_done_sticky <= '0';
+            end if;
           when others => null;
         end case;
       else
@@ -109,8 +115,11 @@ begin
               avs_readdata <= (31 downto 1 => '0', 0 => out_busy);
             when 22 =>
               avs_readdata <= (31 downto 16 => y_out_reg(15)) & std_logic_vector(y_out_reg);        
-            when 24 =>  -- STATUS
-              avs_readdata <= (31 downto 2 => '0', 1 => status_busy, 0 => status_done);
+           when 24 =>
+              avs_readdata <= (31 downto 3 => '0',
+                              2 => status_done_sticky,   -- DONE sticky (new)
+                              1 => status_busy,
+                              0 => status_done);         -- (optional) 1-cycle pulse
             when others => 
               avs_readdata <= X"55555555"; -- alternating 0/1 pattern
           end case;
@@ -276,6 +285,7 @@ begin
         z2 <= t_z2;
         y_out_reg <= signed(y_acc(15 downto 0));  -- truncate to 16 bits (like software)
         status_done <= '1';
+        status_done_sticky <= '1';
         status_busy <= '0';
         mac_s <= IDLE;
     end case;

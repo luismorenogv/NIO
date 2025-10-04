@@ -36,8 +36,8 @@ static inline void clear_states(void) {
 
 static inline int16_t iir_step_hw(int16_t x) {
   IO_CUSTOM[REG_X_IN] = (uint16_t)x;
-  IO_CUSTOM[REG_CTRL] = 1u;       // START=1 (one-shot)
-  while ((IO_CUSTOM[REG_STATUS] & 0x1u) == 0u) { /* wait DONE */ }
+  IO_CUSTOM[REG_CTRL] = 1u;           // START
+  while (IO_CUSTOM[REG_STATUS] & (1u<<1)) { }  // wait BUSY=0
   return (int16_t)IO_CUSTOM[REG_Y_OUT];
 }
 
