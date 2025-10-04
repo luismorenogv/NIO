@@ -78,7 +78,7 @@ int main(void)
 
       // Unpack two signed 16-bit samples 
       int in0 = (w & 0x00008000) ? (w | 0xFFFF0000) : (w & 0x0000FFFF);
-      int in1 = (w >> 16); // arithmetic shift keeps sign on Nios II 
+      int in1 = (int16_t)(w >> 16); // arithmetic shift keeps sign on Nios II
 
       int in_pair[2]  = { in0, in1 };
       int out_pair[2];
