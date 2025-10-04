@@ -239,11 +239,6 @@ mac: process(clk, resetn)
         z1 <= (others=>'0'); z2 <= (others=>'0');
       end if;
 
-      -- 16x16 -> 32
-      mul_p   <= mul_a * mul_b;
-      -- arithmetic shift-right by 8 (Q2.8), with sign extension
-      mul_q28 <= resize(mul_p(31 downto 8), 32);
-
 
       case mac_s is
         when IDLE =>
@@ -305,6 +300,11 @@ mac: process(clk, resetn)
       end case;
     end if;
   end process;
+
+  -- 16x16 -> 32
+  mul_p   <= mul_a * mul_b;
+  -- arithmetic shift-right by 8 (Q2.8), with sign extension
+  mul_q28 <= resize(mul_p(31 downto 8), 32);
 
   -- connect clock for SISO
   clk_out <= clk;

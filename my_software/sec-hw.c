@@ -61,7 +61,11 @@ int main(void)
     for (int i = 0; i <= 7; i++) {
       int w = IO_CUSTOM[i];
 
-      int16_t xin0 = (int16_t)(w & 0xFFFF);
+      if (w & 0x00008000){
+        xin0 = w | 0xFFFF0000;
+      } else {
+        xin0 = w & 0x0000FFFF;
+      }
       int16_t xin1 = (int16_t)((w >> 16) & 0xFFFF);
 
       int16_t y0 = iir_step_hw(xin0);
