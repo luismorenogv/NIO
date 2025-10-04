@@ -38,8 +38,16 @@ architecture mac of gp_custom is
   signal mul_q28              : signed(31 downto 0) := (others=>'0');  -- (a*b)>>8 (arith)
 
   -- FSM
-  type mac_state_t is (IDLE, M1, M2, M3, M4, M5, FIN);
-  signal mac_s                : mac_state_t := IDLE;
+    type mac_state_t is (
+    IDLE,
+    S1_SET, S1_USE,   -- m1 = b0 * x ; y   = z2 + m1
+    S2_SET, S2_USE,   -- m2 = b1 * x ; tz2 = z1 + m2
+    S3_SET, S3_USE,   -- m3 = a1 * y ; tz2 = tz2 + m3
+    S4_SET, S4_USE,   -- m4 = b2 * x ; tz1 = m4
+    S5_SET, S5_USE,   -- m5 = a2 * y ; tz1 = tz1 + m5
+    FIN
+  );
+  signal mac_s : mac_state_t := IDLE;
 
   -- scratch regs used in the sequence
   signal y_acc                : signed(31 downto 0) := (others=>'0');
@@ -215,82 +223,86 @@ begin
   end process outputs;
 
 mac: process(clk, resetn)
-begin
-  if resetn = '0' then
-    z1 <= (others=>'0'); z2 <= (others=>'0');
-    status_busy <= '0'; status_done <= '0';
-    mac_s <= IDLE;
-    mul_a <= (others=>'0'); mul_b <= (others=>'0');
-    mul_p <= (others=>'0'); mul_q28 <= (others=>'0');
-    y_acc <= (others=>'0'); t_z1 <= (others=>'0'); t_z2 <= (others=>'0');
-    y_out_reg <= (others=>'0');
-  elsif rising_edge(clk) then
-    -- default
-    status_done <= '0';
-
-    -- optional clear of states
-    if ctrl_clr = '1' and status_busy = '0' then
+  begin
+    if resetn = '0' then
       z1 <= (others=>'0'); z2 <= (others=>'0');
+      status_busy <= '0'; status_done <= '0';
+      mac_s <= IDLE;
+      mul_a <= (others=>'0'); mul_b <= (others=>'0');
+      mul_p <= (others=>'0'); mul_q28 <= (others=>'0');
+      y_acc <= (others=>'0'); t_z1 <= (others=>'0'); t_z2 <= (others=>'0');
+      y_out_reg <= (others=>'0');
+    elsif rising_edge(clk) then
+      status_done <= '0';
+
+      if ctrl_clr = '1' and status_busy = '0' then
+        z1 <= (others=>'0'); z2 <= (others=>'0');
+      end if;
+
+      -- 16x16 -> 32
+      mul_p <= mul_a * mul_b;
+      -- arithmetic >>8 (Q2.8); sign-extend top 8 bits
+      mul_q28 <= signed( (mul_p(31 downto 24) & mul_p(31 downto 8)) );
+
+      case mac_s is
+        when IDLE =>
+          status_busy <= '0';
+          if ctrl_start = '1' then
+            status_busy <= '1';
+            -- S1: m1 = b0 * x
+            mul_a <= b0; mul_b <= x_in;
+            mac_s <= S1_SET;
+          end if;
+
+        -- m1
+        when S1_SET =>
+          mac_s <= S1_USE;
+        when S1_USE =>
+          y_acc <= z2 + mul_q28;      -- y = z2 + m1
+          mul_a <= b1; mul_b <= x_in; -- set m2
+          mac_s <= S2_SET;
+
+        -- m2
+        when S2_SET =>
+          mac_s <= S2_USE;
+        when S2_USE =>
+          t_z2 <= z1 + mul_q28;       -- z1 + m2
+          mul_a <= a1; mul_b <= signed(y_acc(15 downto 0)); -- set m3
+          mac_s <= S3_SET;
+
+        -- m3
+        when S3_SET =>
+          mac_s <= S3_USE;
+        when S3_USE =>
+          t_z2 <= t_z2 + mul_q28;     -- z1 + m2 + m3
+          mul_a <= b2; mul_b <= x_in; -- set m4
+          mac_s <= S4_SET;
+
+        -- m4
+        when S4_SET =>
+          mac_s <= S4_USE;
+        when S4_USE =>
+          t_z1 <= mul_q28;            -- m4
+          mul_a <= a2; mul_b <= signed(y_acc(15 downto 0)); -- set m5
+          mac_s <= S5_SET;
+
+        -- m5
+        when S5_SET =>
+          mac_s <= S5_USE;
+        when S5_USE =>
+          t_z1 <= t_z1 + mul_q28;     -- m4 + m5
+          mac_s <= FIN;
+
+        when FIN =>
+          z1 <= t_z1;
+          z2 <= t_z2;
+          y_out_reg <= signed(y_acc(15 downto 0));  -- 16-bit like software
+          status_done <= '1';
+          status_busy <= '0';
+          mac_s <= IDLE;
+      end case;
     end if;
-    -- 16x16 -> 32 (numeric_std returns 16+16 = 32 bits here)
-    mul_p <= mul_a * mul_b;
-
-    -- Q2.8 scaling; avoid VHDL-2008 shift_right on SIGNED for old tools
-    -- arithmetic shift by 8 with sign-extension:
-    mul_q28 <= resize(mul_p(31 downto 8), mul_q28'length);
-
-
-    case mac_s is
-      when IDLE =>
-        status_busy <= '0';
-        if ctrl_start = '1' then
-          status_busy <= '1';
-          -- M1: m1 = b0*x  => y = z2 + m1
-          mul_a <= b0; mul_b <= x_in;
-          mac_s <= M1;
-        end if;
-
-      when M1 =>
-        y_acc <= z2 + mul_q28;
-        -- M2: m2 = b1*x
-        mul_a <= b1; mul_b <= x_in;
-        mac_s <= M2;
-
-      when M2 =>
-        t_z2 <= z1 + mul_q28;          -- z1 + m2
-        -- M3: m3 = a1*y
-        mul_a <= a1; mul_b <= signed(y_acc(15 downto 0)); -- y fits 16 bits
-        mac_s <= M3;
-
-      when M3 =>
-        t_z2 <= t_z2 + mul_q28;        -- z1 + m2 + m3
-        -- M4: m4 = b2*x
-        mul_a <= b2; mul_b <= x_in;
-        mac_s <= M4;
-
-      when M4 =>
-        t_z1 <= mul_q28;               -- m4
-        -- M5: m5 = a2*y
-        mul_a <= a2; mul_b <= signed(y_acc(15 downto 0));
-        mac_s <= M5;
-
-      when M5 =>
-        -- z1_next = m4 + m5
-        t_z1 <= t_z1 + mul_q28;
-        mac_s <= FIN;
-
-      when FIN =>
-        -- commit state, output y
-        z1 <= t_z1;
-        z2 <= t_z2;
-        y_out_reg <= signed(y_acc(15 downto 0));  -- truncate to 16 bits (like software)
-        status_done <= '1';
-        status_done_sticky <= '1';
-        status_busy <= '0';
-        mac_s <= IDLE;
-    end case;
-  end if;
-end process;
+  end process;
 
   -- connect clock for SISO
   clk_out <= clk;
