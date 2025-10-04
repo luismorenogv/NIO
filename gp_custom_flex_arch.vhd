@@ -37,6 +37,7 @@ architecture flex of gp_custom is
   signal ctrl_start : std_logic := '0';
   signal ctrl_clr_acc : std_logic := '0';
   signal ctrl_mode_mac : std_logic := '0'; -- 0:mul, 1:MAC
+  signal mode_latched : std_logic := '0';
 
   signal status_busy : std_logic := '0';
   signal status_done : std_logic := '0';
@@ -211,6 +212,7 @@ begin
           if ctrl_start = '1' then
             status_busy <= '1';
             -- latch operands and mode for this op
+            mode_latched <= ctrl_mode_mac;
             mul_a <= opa;
             mul_b <= opb;
             st    <= MUL;
@@ -219,7 +221,7 @@ begin
         when MUL =>
           -- one cycle after latching, mul_q28 is valid
           res_reg <= mul_q28;
-          if ctrl_mode_mac = '1' then
+          if mode_latched = '1' then
             acc <= acc + mul_q28;
           end if;
           st <= FIN;

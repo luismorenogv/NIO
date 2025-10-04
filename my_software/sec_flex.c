@@ -35,7 +35,10 @@ static inline int hw_mul_q28(int16_t a, int16_t b) {
   return (int)IO_CUSTOM[REG_RES];
 }
 
-// Optional helpers
+// ACC helpers
+static inline void hw_acc_set(int32_t val) { // preset ACC to any Q2.8 value
+  IO_CUSTOM[REG_ACC_WR] = (uint32_t)val;
+}
 static inline void hw_acc_clear(void) {
   IO_CUSTOM[REG_CTRL] = (1u << 1);       // CLR_ACC
 }
@@ -81,27 +84,29 @@ int main(void)
       int out_pair[2];
 
       for (int j = 0; j < 2; j++) {
-        // m1 = b0*x; m2 = b1*x; m4 = b2*x (all via HW) 
-        int m1 = hw_mul_q28(b0, (int16_t)in_pair[j]);
-        int m2 = hw_mul_q28(b1, (int16_t)in_pair[j]);
-        int m4 = hw_mul_q28(b2, (int16_t)in_pair[j]);
+        /* y = z2 + b0*x  ->  ACC := z2; ACC += b0*x; y := ACC */
+        hw_acc_set(z2);
+        hw_mac_q28(b0, (int16_t)x);
+        int y = hw_acc_read();
+        int16_t y16 = (int16_t)y;
 
-        // y = z2 + m1 (Q2.8) 
-        int y  = z2 + m1;
+        /* z1_next = b2*x + a2*y  ->  ACC := 0; ACC += b2*x; ACC += a2*y; read ACC */
+        hw_acc_clear();
+        hw_mac_q28(b2, (int16_t)x);
+        hw_mac_q28(a2, y16);
+        int z1_next = hw_acc_read();
 
-        // m3 = a1*y ; m5 = a2*y (cast y to 16-bit like HW path) 
-        int16_t y16 = (int16_t)y;     // same truncation as HW biquad version
-        int m3 = hw_mul_q28(a1, y16);
-        int m5 = hw_mul_q28(a2, y16);
+        /* z2_next = z1 + b1*x + a1*y  ->  ACC := z1; ACC += b1*x; ACC += a1*y; read ACC */
+        hw_acc_set(z1);
+        hw_mac_q28(b1, (int16_t)x);
+        hw_mac_q28(a1, y16);
+        int z2_next = hw_acc_read();
 
-        // Next state and output (same order as sec_soft.c) 
-        int z1_next = m4 + m5;
-        int z2_next = z1 + m2 + m3;
-
+        /* commit state + output */
         z1 = z1_next;
         z2 = z2_next;
+        out_pair[j] = y;
 
-        out_pair[j] = y;              // Q2.8 result sample
       }
 
       // Repack two 16-bit outputs to one 32-bit word 
