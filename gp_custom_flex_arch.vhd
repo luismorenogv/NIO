@@ -198,7 +198,7 @@ begin
       mul_a <= (others => '0'); mul_b <= (others => '0');
       acc <= (others => '0'); res_reg <= (others => '0');
       status_busy <= '0'; status_done <= '0';
-      st <= IDLE;
+      st <= IDLE; mode_latched <= '0';
     elsif rising_edge(clk) then
       status_done <= '0';
       -- allow clearing ACC when not busy
