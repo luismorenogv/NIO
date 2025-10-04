@@ -12,7 +12,7 @@
 
 
 # declare here all user *.c files that are separate tests for the NIOS
-ALL_PROGRAMS = copy.c sec_soft.c
+ALL_PROGRAMS = copy.c sec_soft.c sec-hw.c
 
 # comment/uncomment to activate only one of the two following lines
 MY_OPTIONS = -save-temps -O0
